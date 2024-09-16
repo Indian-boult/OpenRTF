@@ -134,4 +134,14 @@ public class RtfTestBase {
         out.write(DocWriter.getISOBytes(text.toString()));
         assertEquals(text.toString(), out);
     }
+
+    @Test
+    public void testSetPageOrientation() throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        RtfDocument doc = new RtfDocument();
+        doc.setPageOrientation(true); // Set to landscape
+        doc.writeDocument(out);
+        String rtfOutput = new String(out.toByteArray(), "ISO-8859-1");
+        Assert.assertTrue(rtfOutput.contains("\\landscape"));
+    }
 }
