@@ -107,6 +107,11 @@ public class RtfDocument extends RtfElement {
     private RtfBasicElement lastElementWritten = null;
     
     /**
+     * Indicates whether the document is in landscape orientation
+     */
+    private boolean isLandscape = false;
+
+    /**
      * Constant for the Rtf document start
      */
     private static final byte[] RTF_DOCUMENT = DocWriter.getISOBytes("\\rtf1");
@@ -147,6 +152,9 @@ public class RtfDocument extends RtfElement {
         try {
             out.write(OPEN_GROUP);
             out.write(RTF_DOCUMENT);
+            if (this.isLandscape) {
+                out.write(DocWriter.getISOBytes("\\landscape"));
+            }
             this.documentHeader.writeContent(out);
             this.data.writeTo(out);
             out.write(CLOSE_GROUP);
@@ -154,6 +162,7 @@ public class RtfDocument extends RtfElement {
             ioe.printStackTrace();
         }
     }
+    
     
     /**
      * Opens the RtfDocument and initializes the data cache. If the data cache is
@@ -237,7 +246,17 @@ public class RtfDocument extends RtfElement {
     public RtfDocumentHeader getDocumentHeader() {
         return this.documentHeader;
     }
-    
+
+        /**
+     * Sets the page orientation of the document.
+     * 
+     * @param landscape If true, sets the orientation to landscape; otherwise, portrait.
+     */
+    public void setPageOrientation(boolean landscape) {
+        this.isLandscape = landscape;
+    }
+
+
     /**
      * Writes the given string to the given {@link OutputStream} encoding the string characters.
      * 
@@ -370,4 +389,6 @@ public class RtfDocument extends RtfElement {
         	result.write('\n');
         }
     }
+
+
 }
